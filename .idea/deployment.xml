@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="LeoRover (1a762fce-25c7-49ed-ab4e-2a3d83b151a3)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="MichaelCuda (abad104d-0419-4c6a-a1ce-924756493e14)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="MichaelJetson (01aed3aa-01a6-4fa2-a7f6-eebfb98b27c8)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/thomas/DIANA/DIANA-TemplateCPP" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-wsl-1" />
+            <excludedPath local="true" path="$PROJECT_DIR$/tests/googletest" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-1" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-michaeljetson" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-michaeljetson" />
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug" />
+            <excludedPath local="true" path="$PROJECT_DIR$/tests/googletest" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+      <paths name="ROVER (d8037ca3-47e7-4c1e-91af-2288d93a736e)">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="Xavier_DIANA (a7ea8ad6-3d50-4f37-8ba2-3c222017cdde)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/ardito/develop/DIANA-TemplateCPP" local="$PROJECT_DIR$" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/cmake-build-debug-xavier_diana" />
+            <excludedPath local="true" path="$PROJECT_DIR$/tests/googletest" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

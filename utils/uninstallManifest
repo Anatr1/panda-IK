@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Set the project name
+PROJECT_NAME=@PROJECT_NAME@
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+# Define the path to the install_manifest.txt file
+install_manifest_file="/usr/local/diana/sys/manifests/${PROJECT_NAME}/install_manifest.txt"
+
+deleteManifest=1
+
+# Loop through each line in the file
+while read -r file_path; do
+  # Attempt to delete the file
+  sudo rm "${file_path}"
+
+  # Check the exit status of the rm command
+  if [ $? -eq 0 ]; then
+    # Print a success message in green
+    echo -e "\033[32m ${SCRIPT_DIR}/$0 ${file_path} was successfully removed.\033[0m"
+  else
+    # Print a failure message in red
+    echo -e "\033[31m ${SCRIPT_DIR}/$0 couldn't remove ${file_path}. Consider removing it manually.\033[0m"
+    deleteManifest=0
+  fi
+done < "$install_manifest_file"
+
+if [ ${deleteManifest} -eq 1 ]; then
+    rm "$install_manifest_file"
+    exit 0
+fi
+
+echo -e "\033[31m ${SCRIPT_DIR}/$0 Since there were errors, ${install_manifest_file} will NOT be removed by this script. Consider removing manually the files that weren't removed and the deleting the install manifest manually\033[0m"
+
+# Delete the install_manifest.txt file
+

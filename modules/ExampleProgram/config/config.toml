@@ -1,0 +1,7 @@
+[mqtt]
+broker_ip = "127.0.0.1"
+broker_port = 1883
+
+[example]
+example_variable = 2
+example_text = "This is an example test from config.toml"

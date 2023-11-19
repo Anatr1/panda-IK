@@ -1,0 +1,70 @@
+#This Github action tests the "standard" cmake commands, to assure they are compliant with DIANA conventions.
+name: Make standard commands
+
+on: #defines what triggers the github action
+  push:
+    tags: [ "*" ] #Do the tests on every tag created (e.g. "version 2.0.1")
+    branches: [ master, develop ]  #Do the tests on push/merge of master and develop
+  pull_request:
+    branches: [ master, develop ]  #Do the tests on pull request of master and develop
+
+jobs:
+  Ubuntu-build:
+    permissions: write-all #The PAT provided grants write permissions to all the repo's features
+    runs-on: ubuntu-20.04
+
+    name: Test Make commands for Ubuntu 20
+#here are the steps that will be performed.
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.CR_PAT }} #PAT stored as diana organization's secret
+        submodules: recursive #If present init submodules recursively
+    - name: make configure (ubuntu-20.04)
+      env:
+          GITHUB_ACTION_USERNAME: team-diana
+          GITHUB_ACTION_PASSWORD_PAT: ${{ secrets.CR_PAT }}
+      run: make configure
+    - name: make generate (ubuntu-20.04)
+      run: make generate
+    - name: make build (ubuntu-20.04)
+      run: make build
+    - name: make release (ubuntu-20.04)
+      run: make release
+    - name: make docs (ubuntu-20.04)
+      run: make docs
+    - name: make install (ubuntu-20.04)
+      run: make install
+    - name: make uninstall (ubuntu-20.04)
+      run: make uninstall
+  #Builds on nvidia Jetson (aarch64) architecture
+        #Jetson-build:
+        #permissions: write-all
+        #runs-on: aarch64-ubuntu-18.04
+
+        #name: Test Make commands for Jetson
+      #here are the steps that will be performed.
+          #steps:
+          #- name: Checkout Repository
+          #uses: actions/checkout@v3
+          # with:
+          #token: ${{ secrets.CR_PAT }} #PAT stored as diana organization's secret
+          #submodules: recursive
+          #- name: make configure
+          # env:
+          #GITHUB_ACTION_USERNAME: team-diana
+          #GITHUB_ACTION_PASSWORD_PAT: ${{ secrets.CR_PAT }}
+          #run: make configure
+          #- name: make generate (jetson)
+          # run: make generate
+          #- name: make build (jetson)
+          #  run: make build
+          #- name: make release (jetson)
+          #  run: make release
+          #- name: make docs (ubuntu 18)
+          #  run: make docs
+          #- name: make install (ubuntu 18)
+          #  run: make install
+          #- name: make uninstall (ubuntu 18)
+        #  run: make uninstall

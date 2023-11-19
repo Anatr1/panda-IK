@@ -1,0 +1,17 @@
+[Unit]
+Description= ${DIANA_DESCRIPTION}
+After=network.target
+
+[Service]
+Type=simple
+User=${DIANA_SERVICE_USER_NAME}
+WorkingDirectory=${DIANA_SYSTEM_DIR_SVC}
+ExecStart=/bin/bash ${DIANA_SYSTEM_DIR_SVC}/${PROJECT_NAME}/services/start-${PROJECT_NAME}.sh
+ExecStop=/bin/bash ${DIANA_SYSTEM_DIR_SVC}/${PROJECT_NAME}/services/stop-${PROJECT_NAME}.sh
+
+Restart=on-failure
+# Other Restart options: always, on-abort, etc
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

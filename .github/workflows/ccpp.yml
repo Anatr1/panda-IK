@@ -1,0 +1,53 @@
+#This Github Action tests the success of the code's compilation and install Cmake targets.
+name: CI Build and Install
+
+on: #defines what triggers the github action
+  push:
+    tags: [ "*" ] #Do the tests on every tag created (e.g. "version 2.0.1")
+    branches: [ master, develop ] #Do the tests on push/merge of master and develop
+  pull_request:
+    branches: [ master, develop ]  #Do the tests on pull request of master and develop
+
+jobs:
+
+  Ubuntu-build:
+    permissions: write-all #The PAT provided grants write permissions to all the repo's features
+    runs-on: ubuntu-20.04
+    steps:
+        - name: Checkout Repository 
+          uses: actions/checkout@v3
+          with:
+            token: ${{ secrets.CR_PAT }} #PAT stored as diana organization's secret
+            submodules: recursive #If present init submodules recursively
+        - name: make configure 
+          env:
+              GITHUB_ACTION_USERNAME: team-diana
+              GITHUB_ACTION_PASSWORD_PAT: ${{ secrets.CR_PAT }}
+          run: bash utils/configure.sh
+        - name: compile 
+          run:  sudo rm -rf build && mkdir build && cd build && cmake .. && cmake --build . --config debug && cd ..
+        - name: install 
+          run: cd build && sudo cmake --build . --target install --config Release
+        - name: uninstall 
+          run: sudo bash build/DIANA_uninstall.sh
+  #Builds on nvidia Jetson (aarch64) architecture
+  #Jetson-build:
+        #   permissions: write-all
+        #runs-on: aarch64-ubuntu-18.04
+              # steps:
+              #- name: Checkout Repository (Jetson)
+              #uses: actions/checkout@v3
+              #with:
+              #token: ${{ secrets.CR_PAT }} #PAT stored as diana organization's secret
+              #submodules: recursive
+              #- name: configure (Jetson)
+              #env:
+              #GITHUB_ACTION_USERNAME: team-diana
+              #GITHUB_ACTION_PASSWORD_PAT: ${{ secrets.CR_PAT }}
+              #run: bash utils/configure.sh
+              #- name: compile (Jetson)
+              #run: sudo rm -rf build && mkdir build && cd build && cmake .. && cmake --build . --config debug && cd ..
+              #- name: install (Jetson)
+              #run: cd build &&  sudo cmake --build . --target install --config Release
+              #- name: uninstall (Jetson)
+            #run: sudo bash build/DIANA_uninstall.sh
