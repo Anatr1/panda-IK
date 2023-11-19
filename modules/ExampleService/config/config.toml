@@ -1,6 +1,0 @@
-[mqtt]
-broker_ip = "127.0.0.1"
-broker_port = 1883
-
-[example]
-example_variable = "Example text"

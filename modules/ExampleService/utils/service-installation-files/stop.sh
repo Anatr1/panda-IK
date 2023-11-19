@@ -1,6 +1,0 @@
-#!/bin/bash
-
-FOLDER_NAME=${DIANA_SYSTEM_DIR_SVC}/${PROJECT_NAME}
-EXECUTABLE_NAME=${PROJECT_NAME}
-
-# Code to stop the software

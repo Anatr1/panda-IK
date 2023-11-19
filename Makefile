@@ -8,14 +8,9 @@
 #	echo "example" &&\ <- add &&\ to concatenate shell commands
 #	ls -l
 
+.PHONY: build
+
 #This special target is invoked on "make" command (with no args). Feel free to edit it.
-all: build run_ExampleProgram
-
-run_ExampleProgram:
-	./build/modules/ExampleProgram/ExampleProgram
-
-run_ExampleService:
-	./build/modules/ExampleService/ExampleService
 
 #DEPRECATED
 #This target sets up the docker container. Notice: This kind of commands (make targets with docker build/run commands inside)
