@@ -7,8 +7,8 @@ using namespace std;
  * Converts xyzrpy to transformation matrix in column-major order.
  * @param xyzrpy array of 6 doubles in the order of [x, y, z, roll, pitch, yaw].
  * @return array of 16 doubles in column-major order.
-*/
-array<double, 16> from_xyzrpy2transformation_matrix(array<double, 6> xyzrpy){
+ */
+array<double, 16> from_xyzrpy2transformation_matrix(array<double, 6> xyzrpy) {
     array<double, 16> result;
     double x = xyzrpy[0];
     double y = xyzrpy[1];
@@ -53,59 +53,58 @@ array<double, 16> from_xyzrpy2transformation_matrix(array<double, 6> xyzrpy){
     return result;
 }
 
+/**
+ * Computes inverse kinematics for the Panda robot.
+ * @param xyzrpy array of 6 doubles in the order of [x, y, z, roll, pitch, yaw].
+ * @param q_actual array of 7 doubles representing the current joint angles.
+ * @return array of 7 doubles representing the computed joint angles.
+ */
+array<double, 7> compute_inverse_kinematics(array<double, 6> xyzrpy, array<double, 7> q_actual) {
+    // Compute inverse kinematics available solutions
+    array<array<double, 7>, 4> available_solutions = franka_IK_EE(from_xyzrpy2transformation_matrix(xyzrpy), 0, q_actual);
 
-extern "C" {
-    /**
-     * Computes inverse kinematics for the Panda robot.
-     * @param xyzrpy array of 6 doubles in the order of [x, y, z, roll, pitch, yaw].
-     * @param q_actual array of 7 doubles representing the current joint angles.
-     * @return array of 7 doubles representing the computed joint angles.
-    */
-    array<double, 7> compute_inverse_kinematics(array<double, 6> xyzrpy, array<double, 7> q_actual) {
-        // Compute inverse kinematics available solutions
-        array<array<double, 7>, 4> available_solutions = franka_IK_EE(from_xyzrpy2transformation_matrix(xyzrpy), 0, q_actual);
-
-        // Discard any solution with nan values
-        array<array<double, 7>, 4> filtered_solutions;
-        int index = 0;
-        for (int i = 0; i < 4; i++) {
-            bool has_nan = false;
-            for (int j = 0; j < 7; j++) {
-                if (isnan(available_solutions[i][j])) {
-                    has_nan = true;
-                    break;
-                }
-            }
-            if (!has_nan) {
-                filtered_solutions[index] = available_solutions[i];
-                index++;
+    // Discard any solution with nan values
+    array<array<double, 7>, 4> filtered_solutions;
+    int index = 0;
+    for (int i = 0; i < 4; i++) {
+        bool has_nan = false;
+        for (int j = 0; j < 7; j++) {
+            if (isnan(available_solutions[i][j])) {
+                has_nan = true;
+                break;
             }
         }
-
-        // If no solutions, return current joint angles
-        if (index == 0) {
-            //cout << "NO SOLUTIONS FOUND" << endl;
-            return q_actual;
+        if (!has_nan) {
+            filtered_solutions[index] = available_solutions[i];
+            index++;
         }
-
-        // Select solution with smallest joint angle difference from q_actual
-        double min_diff = 1000.0;
-        int min_index = 0;
-        for (int i = 0; i < index; i++) {
-            double diff = 0.0;
-            for (int j = 0; j < 7; j++) {
-                diff += abs(filtered_solutions[i][j] - q_actual[j]);
-            }
-            if (diff < min_diff) {
-                min_diff = diff;
-                min_index = i;
-            }
-        }
-
-        // Return solution with smallest joint angle difference from q_actual
-        return filtered_solutions[min_index];
     }
 
+    // If no solutions, return current joint angles
+    if (index == 0) {
+        // cout << "NO SOLUTIONS FOUND" << endl;
+        return q_actual;
+    }
+
+    // Select solution with smallest joint angle difference from q_actual
+    double min_diff = 1000.0;
+    int min_index = 0;
+    for (int i = 0; i < index; i++) {
+        double diff = 0.0;
+        for (int j = 0; j < 7; j++) {
+            diff += abs(filtered_solutions[i][j] - q_actual[j]);
+        }
+        if (diff < min_diff) {
+            min_diff = diff;
+            min_index = i;
+        }
+    }
+
+    // Return solution with smallest joint angle difference from q_actual
+    return filtered_solutions[min_index];
+}
+
+extern "C" {
     /**
      * Computes inverse kinematics for the Panda robot.
      * Same as compute_inverse_kinematics, but instead of returning the result, it stores it in the output array.
@@ -113,52 +112,10 @@ extern "C" {
      * @param q_actual array of 7 doubles representing the current joint angles.
      * @param output array of 7 doubles representing the computed joint angles.
      * @return void.
-    */
-    void compute_inverse_kinematics_void(const std::array<double, 6>& xyzrpy, const std::array<double, 7>& q_actual, std::array<double, 7>& output) {
-        // Compute inverse kinematics available solutions
-        std::array<std::array<double, 7>, 4> available_solutions = franka_IK_EE(from_xyzrpy2transformation_matrix(xyzrpy), 0, q_actual);
-
-        // Discard any solution with nan values
-        std::array<std::array<double, 7>, 4> filtered_solutions;
-        int index = 0;
-        for (int i = 0; i < 4; i++) {
-            bool has_nan = false;
-            for (int j = 0; j < 7; j++) {
-                if (isnan(available_solutions[i][j])) {
-                    has_nan = true;
-                    break;
-                }
-            }
-            if (!has_nan) {
-                filtered_solutions[index] = available_solutions[i];
-                index++;
-            }
-        }
-
-        // If no solutions, return current joint angles
-        if (index == 0) {
-            //cout << "NO SOLUTIONS FOUND" << endl;
-            output = q_actual;
-            return;
-        }
-
-        // Select solution with smallest joint angle difference from q_actual
-        double min_diff = 1000.0;
-        int min_index = 0;
-        for (int i = 0; i < index; i++) {
-            double diff = 0.0;
-            for (int j = 0; j < 7; j++) {
-                diff += abs(filtered_solutions[i][j] - q_actual[j]);
-            }
-            if (diff < min_diff) {
-                min_diff = diff;
-                min_index = i;
-            }
-        }
-
-        // Return solution with smallest joint angle difference from q_actual
-        output = filtered_solutions[min_index];
-
+     */
+    void compute_inverse_kinematics_void(const std::array<double, 6> &xyzrpy, const std::array<double, 7> &q_actual, std::array<double, 7> &output) {
+        output = compute_inverse_kinematics(xyzrpy, q_actual);
+        
         return;
     }
 }
