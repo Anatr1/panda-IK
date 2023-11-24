@@ -12,6 +12,6 @@ q_actual = (ctypes.c_double * 7)(-0.29, -0.176, -0.232, -0.67, 1.04, 2.56, 0.0)
 output = (ctypes.c_double * 7)()
 
 # Call a function from the library
-result = pandaik_lib.compute_inverse_kinematics_void(xyzrpy, q_actual, output)
+pandaik_lib.compute_inverse_kinematics_void(xyzrpy, q_actual, output)
 print("Result from C++:", list(output))  # Assuming the function returns an array of 7 doubles
 # Should print: Result from C++: [0.8867046650124633, -1.3398493172549706, -0.7760786149655098, -2.652291962842672, 2.2357825028981364, 2.737863867200816, 0.0]
