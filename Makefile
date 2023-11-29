@@ -16,7 +16,7 @@
 #This target sets up the docker container. Notice: This kind of commands (make targets with docker build/run commands inside)
 # shall ONLY be used by the developer for testing the docker container creation, and NEVER be called by automated processes!
 docker-build:
-	sudo docker build .
+	docker build .
 
 # ------- PROTECTED TARGETS ------- #
 # Do not edit the below targets unless you REALLY know what you are doing.
@@ -53,7 +53,7 @@ release:
 # Installs in system as service
 install:
 	cd build &&\
-	sudo cmake --build . --target install --config Release &&\
+	cmake --build . --target install --config Release &&\
 	bash DIANA_SetupInstallManifest.sh "/usr/local/diana/sys/manifests"
 
 # Creates documentation.
@@ -67,4 +67,4 @@ test:
 	make test
 
 uninstall:
-	sudo bash build/DIANA_uninstall.sh
+	bash build/DIANA_uninstall.sh

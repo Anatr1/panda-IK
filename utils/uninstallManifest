@@ -13,7 +13,7 @@ deleteManifest=1
 # Loop through each line in the file
 while read -r file_path; do
   # Attempt to delete the file
-  sudo rm "${file_path}"
+  rm "${file_path}"
 
   # Check the exit status of the rm command
   if [ $? -eq 0 ]; then

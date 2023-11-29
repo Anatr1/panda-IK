@@ -24,10 +24,10 @@ if [ $# -eq 0 ]; then
   DESTINATION=${DefaultPath}/${ProjectName}/install_manifest.txt
 
   #Create destination if not existing
-  sudo mkdir -p "${DefaultPath}/${ProjectName}" #2>/dev/null
+  mkdir -p "${DefaultPath}/${ProjectName}" #2>/dev/null
 
   #Copy file
-  sudo cp "${SCRIPT_DIR}/install_manifest.txt" "${DESTINATION}"
+  cp "${SCRIPT_DIR}/install_manifest.txt" "${DESTINATION}"
   if [ $? -eq 0 ]; then
     # Print a success message
     echo -e "\033[32m${SCRIPT_DIR}/$0: succesfully exported install manifest as ${DESTINATION}\033[0m"
@@ -43,9 +43,9 @@ else
   DESTINATION=${1}/${ProjectName}/install_manifest.txt
 
   #create destination folder
-    sudo mkdir -p "${1}/${ProjectName}" #2>/dev/null
+    mkdir -p "${1}/${ProjectName}" #2>/dev/null
   #copy file
-    sudo cp "${SCRIPT_DIR}/install_manifest.txt" "${DESTINATION}"
+    cp "${SCRIPT_DIR}/install_manifest.txt" "${DESTINATION}"
     if [ $? -eq 0 ]; then
       # Print a success message
       echo -e "\033[32m${SCRIPT_DIR}/$0: succesfully exported install manifest as ${DESTINATION}\033[0m"
