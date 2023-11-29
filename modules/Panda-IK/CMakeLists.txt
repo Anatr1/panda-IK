@@ -19,9 +19,9 @@ include_directories(${DIANA_SYSTEM_DIR_INC})
 add_library(${PROJECT_NAME} SHARED include/panda_ik.hpp source/panda_ik.cpp)
 
 #Find libraries
-find_package(toml11 REQUIRED
+#ind_package(toml11 REQUIRED
              #Add here a new line if needed
-             )
+#             )
 
 #Includes the main build directory (e.g. the build folder, or cmake-build-*), containing the header file "project_globalvariables.h"
 #This way you can include and use the declared variables in your C++ file.
@@ -35,15 +35,15 @@ include_directories(include
         )
 
 #Tell the linker to add libraries ("-lNameOfLibrary")
-target_link_libraries(${PROJECT_NAME}
-                      toml11::toml11  #Toml Library for setting files
-                      Moquette        #DIANA Mqtt Shared Library
-                      pthread
-                      rt              #rt, needed by SHMEM
-                      Shmem          #DIANA Shared Memory Library
-                      Moquette2
+#target_link_libraries(${PROJECT_NAME}
+#                      toml11::toml11  #Toml Library for setting files
+#                      Moquette        #DIANA Mqtt Shared Library
+#                      pthread
+#                      rt              #rt, needed by SHMEM
+#                      Shmem          #DIANA Shared Memory Library
+#                      Moquette2
                       # Add a line here to link more libraries
-                      )
+#                     )
 
 
 set(RST_PUBLIC_HEADERS
